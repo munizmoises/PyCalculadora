@@ -6,16 +6,36 @@ def inserir_texto(texto):
     # Ele vai pegar o texto que já está digitado no visor
     conteudo_atual = visor.get()
 
-    # Ele vai limpa o visor
+    # Limpa o visor do índice 0 até o final (tkinter.END)
     visor.delete(0, tkinter.END)
 
     # Reescreve o conteúdo antigo juntamente com o novo caractere clicado
     visor.insert(0, conteudo_atual + texto)
 
+def limpar_visor():
+    # Apaga absolutamente tudo do visor
+    visor.delete(0, tkinter.END)
+
+def calcular_resultado():
+    try:
+        # Pega a expressão em texto (por exemplo, "7+5*2")
+        expressao = visor.get()
+        
+        # A função eval() lê o texto e resolve a conta matemática
+        resultado = eval(expressao)
+        
+        # Limpa o visor e exibe o resultado final convertido em texto
+        visor.delete(0, tkinter.END)
+        visor.insert(0, str(resultado))
+    except Exception:
+        # Se o usuário tentar uma operação inválida (ex: 5// ou dividir por 0)
+        visor.delete(0, tkinter.END)
+        visor.insert(0, "Erro")
+
 # Janela do tkinter
 
 janela = tkinter.Tk() # Cria a janela principal
-janela.title('Calculadora 0.1.0-alpha') # Titulo da janela
+janela.title('Calculadora 0.2.0-alpha') # Titulo da janela
 janela.resizable(False, False) # Não ter como maximizar a tela
 
 # Visor da janela
@@ -61,13 +81,13 @@ btn_3.grid(row=3, column=2, padx=3, pady=3)
 
 # Linha 4 (row=4)
 
-btn_limpar = tkinter.Button(janela, text='C', width=5, height=2, font=('Arial', 14))
+btn_limpar = tkinter.Button(janela, text='C', width=5, height=2, font=('Arial', 14), command=limpar_visor)
 btn_limpar.grid(row=4, column=0, padx=3, pady=3)
 
 btn_0 = tkinter.Button(janela, text='0', width=5, height=2, font=('Arial', 14), command=lambda: inserir_texto('0'))
 btn_0.grid(row=4, column=1, padx=3, pady=3)
 
-btn_igual = tkinter.Button(janela, text="=", width=5, height=2, font=("Arial", 14))
+btn_igual = tkinter.Button(janela, text="=", width=5, height=2, font=("Arial", 14), command=calcular_resultado)
 btn_igual.grid(row=4, column=2, padx=3, pady=3)
 
 btn_somar = tkinter.Button(janela, text="+", width=5, height=2, font=("Arial", 14), command=lambda: inserir_texto("+"))
