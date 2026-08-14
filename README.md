@@ -11,4 +11,4 @@ Uma calculadora desktop simples e responsiva desenvolvida em Python utilizando a
 
 ## 📝 Status do Projeto
 
-⚠️ **Versão 0.3.0-alpha** - O projeto está em fase inicial de desenvolvimento (estruturação da interface gráfica e inserção de componentes).
+⚠️ **Versão 0.4.0-alpha** - O projeto está em fase inicial de desenvolvimento (estruturação da interface gráfica e inserção de componentes).
