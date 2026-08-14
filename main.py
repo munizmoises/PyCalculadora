@@ -6,41 +6,52 @@ def inserir_texto(texto):
     # Ele vai pegar o texto que já está digitado no visor
     conteudo_atual = visor.get()
 
-    # Limpa o visor do índice 0 até o final (tkinter.END)
-    visor.delete(0, tkinter.END)
+    limpar_visor()
 
     # Reescreve o conteúdo antigo juntamente com o novo caractere clicado
     visor.insert(0, conteudo_atual + texto)
 
 def limpar_visor():
-    # Apaga absolutamente tudo do visor
+    # Apaga tudo do visor
+    visor.configure(validate='none')
     visor.delete(0, tkinter.END)
+    visor.configure(validate='key')
 
 def calcular_resultado():
     try:
-        # Pega a expressão em texto (por exemplo, "7+5*2")
+        # Pega a expressão em texto
         expressao = visor.get()
-        
+
+        expressao = expressao.replace(',' , '.')
+
         # A função eval() lê o texto e resolve a conta matemática
-        resultado = eval(expressao)
-        
+        resultado = str(eval(expressao))
+        resultado = resultado.replace('.' , ',')
+
         # Limpa o visor e exibe o resultado final convertido em texto
-        visor.delete(0, tkinter.END)
+        limpar_visor()
         visor.insert(0, str(resultado))
     except Exception:
-        # Se o usuário tentar uma operação inválida (ex: 5// ou dividir por 0)
-        visor.delete(0, tkinter.END)
-        visor.insert(0, "Erro")
+        # Se tentar uma operação inválida (ex: 5// ou dividir por 0)
+        limpar_visor()
+        visor.insert(0, 'Erro')
+
+def validar_numeros(texto):
+    if texto.isdigit() or texto.strip() or texto == '+':
+        return True
+    return False
 
 # Janela do tkinter
 
 janela = tkinter.Tk() # Cria a janela principal
-janela.title('Calculadora 0.2.0-alpha') # Titulo da janela
+janela.title('Calculadora 0.3.0-alpha') # Titulo da janela
 janela.resizable(False, False) # Não ter como maximizar a tela
+janela.iconbitmap('./img/icone.ico') # Altera o ícone da janela
 
 # Visor da janela
 
-visor = tkinter.Entry(janela, width=16, font=('Arial', 24), justify='right')
+validador = janela.register(validar_numeros)
+visor = tkinter.Entry(janela, width=16, font=('Arial', 24), justify='right', validate="key", validatecommand=(validador, "%P"))
 
 # O visor fica na Linha 0, Coluna 0, e ocupa a largura de 4 colunas (columnspan=4)
 visor.grid(row=0, column=0, columnspan=4, padx=10, pady=10)
@@ -79,6 +90,9 @@ btn_2.grid(row=3, column=1, padx=3, pady=3)
 btn_3 = tkinter.Button(janela, text='3', width=5, height=2, font=('Arial', 14), command=lambda: inserir_texto('3'))
 btn_3.grid(row=3, column=2, padx=3, pady=3)
 
+btn_somar = tkinter.Button(janela, text="+", width=5, height=2, font=("Arial", 14), command=lambda: inserir_texto('+'))
+btn_somar.grid(row=3, column=3, padx=3, pady=3)
+
 # Linha 4 (row=4)
 
 btn_limpar = tkinter.Button(janela, text='C', width=5, height=2, font=('Arial', 14), command=limpar_visor)
@@ -87,11 +101,11 @@ btn_limpar.grid(row=4, column=0, padx=3, pady=3)
 btn_0 = tkinter.Button(janela, text='0', width=5, height=2, font=('Arial', 14), command=lambda: inserir_texto('0'))
 btn_0.grid(row=4, column=1, padx=3, pady=3)
 
-btn_igual = tkinter.Button(janela, text="=", width=5, height=2, font=("Arial", 14), command=calcular_resultado)
+btn_igual = tkinter.Button(janela, text=',', width=5, height=2, font=("Arial", 14), command=lambda: inserir_texto(','))
 btn_igual.grid(row=4, column=2, padx=3, pady=3)
 
-btn_somar = tkinter.Button(janela, text="+", width=5, height=2, font=("Arial", 14), command=lambda: inserir_texto("+"))
-btn_somar.grid(row=4, column=3, padx=3, pady=3)
+btn_igual = tkinter.Button(janela, text='=', width=5, height=2, font=("Arial", 14), command=calcular_resultado)
+btn_igual.grid(row=4, column=3, padx=3, pady=3)
 
 
 
